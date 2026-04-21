@@ -372,8 +372,8 @@ nav.nav-over .nav-wordmark { color: #fff; }
 nav.nav-over .nav-links a { color: rgba(255,255,255,0.78); }
 nav.nav-over .nav-links a:hover { color: #fff; }
 nav.nav-over .nav-logo-img { filter: brightness(0) invert(1); }
-nav.nav-over .nav-cta { background: rgba(255,255,255,0.95); color: var(--navy); }
-nav.nav-over .nav-cta:hover { background: #fff; }
+nav.nav-over .nav-cta { background: var(--green); color: #fff; }
+nav.nav-over .nav-cta:hover { background: #6aa13b; }
 
 /* HERO PLEIN ÉCRAN */
 .hero-bg {

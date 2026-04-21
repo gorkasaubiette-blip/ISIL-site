@@ -37,7 +37,7 @@
     }
     .se-title {
       position: absolute; z-index: 3;
-      left: 50%; bottom: 7vh;
+      left: 50%; bottom: 11vh;
       transform: translateX(-50%);
       display: flex; flex-direction: column; align-items: center;
       gap: 12px; pointer-events: none;
@@ -56,8 +56,8 @@
       color: rgba(58,117,147,0.6);
     }
     .se-hint {
-      position: fixed; top: 50%; left: 50%;
-      transform: translate(-50%, calc(-50% + 30vh));
+      position: fixed; bottom: 32px; top: auto; left: 50%;
+      transform: translateX(-50%);
       font-family: 'DM Sans', sans-serif;
       font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
       color: rgba(26,43,53,0.5);
@@ -126,7 +126,10 @@
     if (progress >= 1 && !entering) {
       entering = true;
       wrap.classList.add('fade-out');
-      setTimeout(() => { window.location.href = 'index.html'; }, 600);
+      setTimeout(() => {
+        sessionStorage.setItem('isil_entered', '1');
+        window.location.href = 'index.html';
+      }, 600);
     }
   }
 
