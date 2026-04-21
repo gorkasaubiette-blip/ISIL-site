@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISIL — Rendez le silence à votre jardin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    html, body { overflow: hidden; background: var(--cream); height: 100%; }
+    .se-wrap { position: fixed; inset: 0; background: var(--cream); transition: opacity .6s ease; }
+    .se-wrap.fade-out { opacity: 0; }
+    .se-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .se-bg::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+    .se-media {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      overflow: hidden;
+      z-index: 2;
+      max-width: 95vw; max-height: 78vh;
+      background: var(--cream);
+    }
+    .se-media video {
+      width: 100%; height: 100%;
+      object-fit: contain; display: block;
+      mix-blend-mode: multiply;
+      /* Masquer le texte "ISIL" incrusté en bas de la vidéo */
+      clip-path: inset(0 0 16% 0);
+    }
+    .se-title {
+      position: absolute; z-index: 3;
+      left: 50%; bottom: 7vh;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; pointer-events: none;
+      text-align: center;
+    }
+    .se-title h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(42px, 7vw, 88px);
+      font-weight: 400; letter-spacing: 10px;
+      color: var(--blue); line-height: 1;
+      margin: 0; white-space: nowrap;
+    }
+    .se-tagline {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px; letter-spacing: 4px; text-transform: uppercase;
+      color: rgba(58,117,147,0.6);
+    }
+    .se-hint {
+      position: fixed; top: 50%; left: 50%;
+      transform: translate(-50%, calc(-50% + 30vh));
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+      color: rgba(26,43,53,0.5);
+      z-index: 5;
+      animation: hintPulse 2.5s ease-in-out infinite;
+      transition: opacity .4s ease;
+    }
+    .se-hint.hidden { opacity: 0; pointer-events: none; }
+    @keyframes hintPulse {
+      0%,100% { opacity: .5; }
+      50%     { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="se-wrap" id="seWrap">
+  <div class="se-bg"></div>
+
+  <div class="se-media" id="seMedia" style="width:340px;height:360px">
+    <video id="seVideo" src="logo%20en%20action.mp4" muted playsinline preload="auto"></video>
+  </div>
+
+  <div class="se-title" id="seTitle">
+    <h1>ISIL</h1>
+    <span class="se-tagline">Pays Basque · Sud Landes</span>
+  </div>
+
+  <div class="se-hint" id="seHint">Scrollez pour entrer ↓</div>
+</div>
+
+<script>
+(() => {
+  const wrap = document.getElementById('seWrap');
+  const media = document.getElementById('seMedia');
+  const video = document.getElementById('seVideo');
+  const title = document.getElementById('seTitle');
+  const hint = document.getElementById('seHint');
+
+  let progress = 0;
+  let touchStartY = 0;
+  let entering = false;
+  let videoDuration = 0;
+  const isMobile = () => window.innerWidth < 768;
+
+  video.addEventListener('loadedmetadata', () => {
+    videoDuration = video.duration || 0;
+  });
+
+  function apply() {
+    const w = 340 + progress * (isMobile() ? 580 : 1100);
+    const h = 360 + progress * (isMobile() ? 220 : 420);
+    media.style.width = w + 'px';
+    media.style.height = h + 'px';
+
+    // Scrub video to scroll progress
+    if (videoDuration > 0) {
+      try { video.currentTime = progress * videoDuration; } catch (e) {}
+    }
+
+    // Fade title & hint as expansion progresses
+    title.style.opacity = Math.max(0, 1 - progress * 1.6);
+    if (progress > 0.05) hint.classList.add('hidden');
+    else hint.classList.remove('hidden');
+
+    if (progress >= 1 && !entering) {
+      entering = true;
+      wrap.classList.add('fade-out');
+      setTimeout(() => { window.location.href = 'index.html'; }, 600);
+    }
+  }
+
+  function onWheel(e) {
+    if (entering) return;
+    e.preventDefault();
+    progress = Math.min(Math.max(progress + e.deltaY * 0.0012, 0), 1);
+    apply();
+  }
+
+  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
+  function onTouchMove(e) {
+    if (entering || !touchStartY) return;
+    e.preventDefault();
+    const y = e.touches[0].clientY;
+    const d = touchStartY - y;
+    progress = Math.min(Math.max(progress + d * 0.008, 0), 1);
+    apply();
+    touchStartY = y;
+  }
+  function onTouchEnd() { touchStartY = 0; }
+
+  window.addEventListener('wheel', onWheel, { passive: false });
+  window.addEventListener('touchstart', onTouchStart, { passive: false });
+  window.addEventListener('touchmove', onTouchMove, { passive: false });
+  window.addEventListener('touchend', onTouchEnd);
+
+  apply();
+})();
+</script>
+</body>
+</html>
