@@ -10,14 +10,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install lftp
+        run: sudo apt-get install -y lftp
+
       - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.3.4
-        with:
-          server: 72.60.93.231
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/
-          exclude: |
-            **/.git*
-            **/.git*/**
-            .github/**
+        run: |
+          lftp -e "
+            set ftp:ssl-allow no;
+            open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} 72.60.93.231;
+            mirror --reverse --only-newer --no-perms --exclude=^\.git --exclude=^\.github /home/runner/work/ISIL-site/ISIL-site/ /public_html/;
+            quit
+          "
