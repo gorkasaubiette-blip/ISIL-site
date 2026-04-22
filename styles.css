@@ -753,6 +753,16 @@ nav.open .nav-burger span:nth-child(3) { transform:rotate(-45deg) translate(5px,
 
 @media (max-width: 900px) {
   nav { padding: 0 28px; }
+  /* Sur mobile, nav-over = même style que nav normal (fond solide, toujours visible) */
+  nav.nav-over {
+    background: rgba(236,231,216,0.95);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(26,43,53,0.08);
+    position: fixed;
+  }
+  nav.nav-over .nav-wordmark { color: var(--navy); }
+  nav.nav-over .nav-burger span { background: var(--navy); }
+  nav.nav-over .nav-logo-img { filter: none; }
   .nav-burger { display:flex; }
   .nav-cta { display:none; }
   .nav-links { display:none; }
