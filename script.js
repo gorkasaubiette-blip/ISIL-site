@@ -72,3 +72,14 @@ document.querySelectorAll('.fq').forEach(fq => {
   const q = fq.querySelector('.fq-q');
   if (q) q.addEventListener('click', () => fq.classList.toggle('open'));
 });
+
+// Hamburger menu
+const burger = document.getElementById('navBurger');
+if (burger) {
+  burger.addEventListener('click', () => {
+    burger.closest('nav').classList.toggle('open');
+  });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => burger.closest('nav').classList.remove('open'));
+  });
+}

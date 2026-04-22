@@ -70,6 +70,11 @@
       0%,100% { opacity: .5; }
       50%     { opacity: 1; }
     }
+    @media (max-width: 900px) {
+      .se-title { bottom: auto; top: 50%; transform: translate(-50%, -50%); }
+      .se-title h1 { font-size: clamp(52px, 18vw, 88px); letter-spacing: 14px; }
+      .se-hint { font-size: 12px; letter-spacing: 2px; bottom: 60px; }
+    }
   </style>
 </head>
 <body>
@@ -97,64 +102,58 @@
   const title = document.getElementById('seTitle');
   const hint = document.getElementById('seHint');
 
-  let progress = 0;
-  let touchStartY = 0;
-  let entering = false;
-  let videoDuration = 0;
-  const isMobile = () => window.innerWidth < 768;
+  const isMobile = window.innerWidth < 900 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  video.addEventListener('loadedmetadata', () => {
-    videoDuration = video.duration || 0;
-  });
+  function goToSite() {
+    wrap.classList.add('fade-out');
+    setTimeout(() => { window.location.href = 'accueil.html'; }, 600);
+  }
 
-  function apply() {
-    const w = 340 + progress * (isMobile() ? 580 : 1100);
-    const h = 360 + progress * (isMobile() ? 220 : 420);
-    media.style.width = w + 'px';
-    media.style.height = h + 'px';
+  if (isMobile) {
+    // Sur mobile : pas de vidéo, juste logo + bouton tactile
+    media.style.display = 'none';
+    hint.textContent = 'Toucher pour entrer';
+    hint.classList.remove('hidden');
+    hint.style.cursor = 'pointer';
+    hint.style.animation = 'hintPulse 2.5s ease-in-out infinite';
+    wrap.addEventListener('click', goToSite);
+  } else {
+    // Sur desktop : animation vidéo au scroll
+    let progress = 0;
+    let entering = false;
+    let videoDuration = 0;
 
-    // Scrub video to scroll progress
-    if (videoDuration > 0) {
-      try { video.currentTime = progress * videoDuration; } catch (e) {}
+    video.addEventListener('loadedmetadata', () => { videoDuration = video.duration || 0; });
+
+    function apply() {
+      const w = 340 + progress * 1100;
+      const h = 360 + progress * 420;
+      media.style.width = w + 'px';
+      media.style.height = h + 'px';
+
+      if (videoDuration > 0) {
+        try { video.currentTime = progress * videoDuration; } catch (e) {}
+      }
+
+      title.style.opacity = Math.max(0, 1 - progress * 1.6);
+      if (progress > 0.05) hint.classList.add('hidden');
+      else hint.classList.remove('hidden');
+
+      if (progress >= 1 && !entering) {
+        entering = true;
+        goToSite();
+      }
     }
 
-    // Fade title & hint as expansion progresses
-    title.style.opacity = Math.max(0, 1 - progress * 1.6);
-    if (progress > 0.05) hint.classList.add('hidden');
-    else hint.classList.remove('hidden');
+    window.addEventListener('wheel', e => {
+      if (entering) return;
+      e.preventDefault();
+      progress = Math.min(Math.max(progress + e.deltaY * 0.0012, 0), 1);
+      apply();
+    }, { passive: false });
 
-    if (progress >= 1 && !entering) {
-      entering = true;
-      wrap.classList.add('fade-out');
-      setTimeout(() => { window.location.href = 'accueil.html'; }, 600);
-    }
-  }
-
-  function onWheel(e) {
-    if (entering) return;
-    e.preventDefault();
-    progress = Math.min(Math.max(progress + e.deltaY * 0.0012, 0), 1);
     apply();
   }
-
-  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
-  function onTouchMove(e) {
-    if (entering || !touchStartY) return;
-    e.preventDefault();
-    const y = e.touches[0].clientY;
-    const d = touchStartY - y;
-    progress = Math.min(Math.max(progress + d * 0.008, 0), 1);
-    apply();
-    touchStartY = y;
-  }
-  function onTouchEnd() { touchStartY = 0; }
-
-  window.addEventListener('wheel', onWheel, { passive: false });
-  window.addEventListener('touchstart', onTouchStart, { passive: false });
-  window.addEventListener('touchmove', onTouchMove, { passive: false });
-  window.addEventListener('touchend', onTouchEnd);
-
-  apply();
 })();
 </script>
 </body>

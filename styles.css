@@ -729,9 +729,26 @@ nav.nav-over .nav-cta:hover { background: #6aa13b; }
   .tranquil-text { padding: 56px 28px; }
 }
 
+/* HAMBURGER */
+.nav-burger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; z-index:200; }
+.nav-burger span { width:24px; height:2px; background:var(--navy); display:block; transition:all .3s ease; }
+nav.nav-over .nav-burger span { background:#fff; }
+nav.open .nav-burger span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+nav.open .nav-burger span:nth-child(2) { opacity:0; }
+nav.open .nav-burger span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
 @media (max-width: 900px) {
   nav { padding: 0 28px; }
+  .nav-burger { display:flex; }
+  .nav-cta { display:none; }
   .nav-links { display:none; }
+  nav.open .nav-links {
+    display:flex; flex-direction:column; position:fixed;
+    inset:0; background:var(--cream-l); padding:88px 40px 40px;
+    gap:28px; z-index:150; list-style:none;
+  }
+  nav.open .nav-links a { font-size:22px; color:var(--navy); font-family:'Cormorant Garamond',serif; font-weight:400; }
+  nav.open .nav-cta { display:inline-block; margin-top:12px; align-self:flex-start; }
   .s, .s-sm { padding: 72px 28px; }
   .ph { padding: 56px 28px 44px; }
   .hero { padding: 100px 28px 80px; }
