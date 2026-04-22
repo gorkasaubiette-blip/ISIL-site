@@ -46,12 +46,10 @@
       gap: 12px; pointer-events: none;
       text-align: center;
     }
-    .se-title h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(42px, 7vw, 88px);
-      font-weight: 400; letter-spacing: 10px;
-      color: var(--navy); line-height: 1;
-      margin: 0; white-space: nowrap;
+    .se-logo-img {
+      width: clamp(160px, 28vw, 320px);
+      height: auto;
+      display: block;
     }
     .se-tagline {
       font-family: 'DM Sans', sans-serif;
@@ -90,7 +88,7 @@
   </div>
 
   <div class="se-title" id="seTitle">
-    <h1>ISIL</h1>
+    <img src="isil-logo-trans.png" alt="ISIL" class="se-logo-img">
     <span class="se-tagline">Pays Basque · Sud Landes</span>
   </div>
 
@@ -120,11 +118,13 @@
     if (started) return;
     started = true;
 
-    // Fade out logo et hint
+    // Fade out logo et hint immédiatement
     title.style.transition = 'opacity 0.4s ease';
     title.style.opacity = '0';
-    hint.style.transition = 'opacity 0.4s ease';
+    hint.style.animation = 'none';
+    hint.style.transition = 'opacity 0.3s ease';
     hint.style.opacity = '0';
+    hint.style.pointerEvents = 'none';
 
     // Après le fade, agrandir et lancer la vidéo
     setTimeout(() => {

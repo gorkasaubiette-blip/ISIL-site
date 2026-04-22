@@ -785,9 +785,9 @@ nav.open .nav-burger span:nth-child(3) { transform:rotate(-45deg) translate(5px,
     margin-top: 8px;
   }
   .nav-links a {
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 0.2px;
-    color: rgba(26,43,53,0.65);
+    color: var(--blue);
     padding: 4px 2px;
     white-space: nowrap;
   }
