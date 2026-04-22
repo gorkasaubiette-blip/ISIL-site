@@ -73,6 +73,16 @@ document.querySelectorAll('.fq').forEach(fq => {
   if (q) q.addEventListener('click', () => fq.classList.toggle('open'));
 });
 
+// Nav devient opaque au scroll (pages avec hero plein écran)
+const navOver = document.querySelector('nav.nav-over');
+if (navOver) {
+  const onScroll = () => {
+    navOver.classList.toggle('nav-solid', window.scrollY > 60);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+}
+
 // Hamburger menu
 const burger = document.getElementById('navBurger');
 if (burger) {

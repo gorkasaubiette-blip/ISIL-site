@@ -366,14 +366,28 @@ nav.nav-over {
   background: transparent;
   backdrop-filter: none; -webkit-backdrop-filter: none;
   border-bottom: 1px solid rgba(255,255,255,0.15);
-  position: absolute; top: 0; left: 0; right: 0;
+  position: fixed; top: 0; left: 0; right: 0;
+  transition: background .3s ease, border-color .3s ease, backdrop-filter .3s ease;
 }
-nav.nav-over .nav-wordmark { color: #fff; }
-nav.nav-over .nav-links a { color: rgba(255,255,255,0.78); }
+nav.nav-over .nav-wordmark { color: #fff; transition: color .3s ease; }
+nav.nav-over .nav-links a { color: rgba(255,255,255,0.78); transition: color .3s ease; }
 nav.nav-over .nav-links a:hover { color: #fff; }
-nav.nav-over .nav-logo-img { filter: brightness(0) invert(1); }
+nav.nav-over .nav-logo-img { filter: brightness(0) invert(1); transition: filter .3s ease; }
 nav.nav-over .nav-cta { background: var(--green); color: #fff; }
 nav.nav-over .nav-cta:hover { background: #6aa13b; }
+nav.nav-over .nav-burger span { background: #fff; transition: background .3s ease; }
+
+/* Nav qui devient opaque après scroll */
+nav.nav-over.nav-solid {
+  background: rgba(236,231,216,0.95);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(26,43,53,0.08);
+}
+nav.nav-over.nav-solid .nav-wordmark { color: var(--navy); }
+nav.nav-over.nav-solid .nav-links a { color: rgba(26,43,53,0.6); }
+nav.nav-over.nav-solid .nav-links a:hover { color: var(--green); }
+nav.nav-over.nav-solid .nav-logo-img { filter: none; }
+nav.nav-over.nav-solid .nav-burger span { background: var(--navy); }
 
 /* HERO PLEIN ÉCRAN */
 .hero-bg {
