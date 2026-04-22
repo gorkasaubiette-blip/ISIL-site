@@ -784,14 +784,16 @@ nav.open .nav-burger span:nth-child(3) { transform:rotate(-45deg) translate(5px,
     border-top: 1px solid rgba(26,43,53,0.08);
     margin-top: 8px;
   }
-  .nav-links a {
+  .nav-links a,
+  nav.nav-over .nav-links a {
     font-size: 13px;
     letter-spacing: 0.2px;
-    color: var(--blue);
+    color: var(--blue) !important;
     padding: 4px 2px;
     white-space: nowrap;
   }
-  .nav-links a.act { color: var(--green); }
+  .nav-links a.act,
+  nav.nav-over .nav-links a.act { color: var(--green) !important; }
   .s, .s-sm { padding: 72px 28px; }
   .ph { padding: 56px 28px 44px; }
   .hero { padding: 100px 28px 80px; }
