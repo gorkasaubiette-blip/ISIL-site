@@ -10,19 +10,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install lftp
-        run: sudo apt-get install -y lftp
-
-      - name: Deploy via FTP
+      - name: Upload files via FTP
         env:
           FTP_USER: ${{ secrets.FTP_USERNAME }}
           FTP_PASS: ${{ secrets.FTP_PASSWORD }}
           FTP_HOST: 72.60.93.231
         run: |
-          cd "$GITHUB_WORKSPACE"
-          lftp -u "$FTP_USER,$FTP_PASS" "ftp://$FTP_HOST" << 'ENDFTP'
-          set ftp:ssl-allow no
-          set ftp:passive-mode yes
-          mirror -R --no-perms --delete --exclude-glob=.git* --exclude-glob=.github* . /public_html/
-          quit
-          ENDFTP
+          find . -not -path './.git*' -not -path './.github*' -type f | while read f; do
+            remote="${f#./}"
+            curl -s --ftp-create-dirs \
+              -T "$f" \
+              "ftp://$FTP_HOST/public_html/$remote" \
+              --user "$FTP_USER:$FTP_PASS"
+          done
+          echo "Deploy terminé"
