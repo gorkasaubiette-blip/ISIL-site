@@ -561,7 +561,7 @@ nav.nav-over .nav-cta:hover { background: #6aa13b; }
 }
 .bg-partner-logo {
   width: 100%; height: auto;
-  display: block;
+  display: block; cursor: pointer;
 }
 .bg-partner-divider {
   width: 1px; height: 120px;
