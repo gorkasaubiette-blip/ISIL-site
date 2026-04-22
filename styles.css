@@ -788,7 +788,7 @@ nav.open .nav-burger span:nth-child(3) { transform:rotate(-45deg) translate(5px,
   nav.nav-over .nav-links a {
     font-size: 13px;
     letter-spacing: 0.2px;
-    color: var(--blue) !important;
+    color: var(--navy) !important;
     padding: 4px 2px;
     white-space: nowrap;
   }
