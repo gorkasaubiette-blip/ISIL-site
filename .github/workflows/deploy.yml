@@ -14,10 +14,15 @@ jobs:
         run: sudo apt-get install -y lftp
 
       - name: Deploy via FTP
+        env:
+          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
+          FTP_HOST: 72.60.93.231
         run: |
-          lftp -e "
-            set ftp:ssl-allow no;
-            open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} 72.60.93.231;
-            mirror --reverse --only-newer --no-perms --exclude=^\.git --exclude=^\.github /home/runner/work/ISIL-site/ISIL-site/ /public_html/;
-            quit
-          "
+          cd "$GITHUB_WORKSPACE"
+          lftp -u "$FTP_USER,$FTP_PASS" "ftp://$FTP_HOST" << 'ENDFTP'
+          set ftp:ssl-allow no
+          set ftp:passive-mode yes
+          mirror -R --no-perms --delete --exclude-glob=.git* --exclude-glob=.github* . /public_html/
+          quit
+          ENDFTP
