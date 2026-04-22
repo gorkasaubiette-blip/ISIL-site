@@ -40,8 +40,8 @@
     }
     .se-title {
       position: absolute; z-index: 3;
-      left: 50%; bottom: 11vh;
-      transform: translateX(-50%);
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
       display: flex; flex-direction: column; align-items: center;
       gap: 12px; pointer-events: none;
       text-align: center;
@@ -94,7 +94,7 @@
     <span class="se-tagline">Pays Basque · Sud Landes</span>
   </div>
 
-  <div class="se-hint" id="seHint">Défilez pour entrer ↓</div>
+  <div class="se-hint" id="seHint">Appuyer pour entrer</div>
 </div>
 
 <script>
@@ -105,58 +105,44 @@
   const title = document.getElementById('seTitle');
   const hint = document.getElementById('seHint');
 
-  const isMobile = window.innerWidth < 900 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  let started = false;
+
+  // État initial : vidéo cachée, logo + hint visibles
+  media.style.opacity = '0';
+  media.style.transition = 'opacity 0.5s ease, width 0.8s ease, height 0.8s ease';
 
   function goToSite() {
     wrap.classList.add('fade-out');
     setTimeout(() => { window.location.href = 'accueil.html'; }, 600);
   }
 
-  if (isMobile) {
-    // Sur mobile : pas de vidéo, juste logo + bouton tactile
-    media.style.display = 'none';
-    hint.textContent = 'Toucher pour entrer';
-    hint.classList.remove('hidden');
-    hint.style.cursor = 'pointer';
-    hint.style.animation = 'hintPulse 2.5s ease-in-out infinite';
-    wrap.addEventListener('click', goToSite);
-  } else {
-    // Sur desktop : animation vidéo au scroll
-    let progress = 0;
-    let entering = false;
-    let videoDuration = 0;
+  function enter() {
+    if (started) return;
+    started = true;
 
-    video.addEventListener('loadedmetadata', () => { videoDuration = video.duration || 0; });
+    // Fade out logo et hint
+    title.style.transition = 'opacity 0.4s ease';
+    title.style.opacity = '0';
+    hint.style.transition = 'opacity 0.4s ease';
+    hint.style.opacity = '0';
 
-    function apply() {
-      const w = 340 + progress * 1100;
-      const h = 360 + progress * 420;
-      media.style.width = w + 'px';
-      media.style.height = h + 'px';
+    // Après le fade, agrandir et lancer la vidéo
+    setTimeout(() => {
+      media.style.width = '92vw';
+      media.style.height = '88vh';
+      media.style.opacity = '1';
 
-      if (videoDuration > 0) {
-        try { video.currentTime = progress * videoDuration; } catch (e) {}
-      }
-
-      title.style.opacity = Math.max(0, 1 - progress * 1.6);
-      if (progress > 0.05) hint.classList.add('hidden');
-      else hint.classList.remove('hidden');
-
-      if (progress >= 1 && !entering) {
-        entering = true;
-        goToSite();
-      }
-    }
-
-    window.addEventListener('wheel', e => {
-      if (entering) return;
-      e.preventDefault();
-      progress = Math.min(Math.max(progress + e.deltaY * 0.0012, 0), 1);
-      apply();
-    }, { passive: false });
-
-    apply();
+      setTimeout(() => {
+        video.play().catch(() => goToSite());
+      }, 400);
+    }, 300);
   }
+
+  // Quand la vidéo se termine → accueil
+  video.addEventListener('ended', goToSite);
+
+  // Clic ou tap sur n'importe où → lancer la vidéo
+  wrap.addEventListener('click', enter);
 })();
 </script>
 </body>
