@@ -752,27 +752,46 @@ nav.open .nav-burger span:nth-child(2) { opacity:0; }
 nav.open .nav-burger span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
 
 @media (max-width: 900px) {
-  nav { padding: 0 28px; }
-  /* Sur mobile, nav-over = même style que nav normal (fond solide, toujours visible) */
+  /* Nav mobile : logo en haut, liens en dessous — toujours visibles, pas de hamburger */
+  nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 14px 20px 10px;
+    gap: 0;
+    position: sticky;
+    background: rgba(236,231,216,0.97);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  }
   nav.nav-over {
-    background: rgba(236,231,216,0.95);
+    background: rgba(236,231,216,0.97);
     backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(26,43,53,0.08);
-    position: fixed;
+    position: sticky;
   }
   nav.nav-over .nav-wordmark { color: var(--navy); }
-  nav.nav-over .nav-burger span { background: var(--navy); }
   nav.nav-over .nav-logo-img { filter: none; }
-  .nav-burger { display:flex; }
+  .nav-logo { flex: 1; }
+  .nav-burger { display:none; }
   .nav-cta { display:none; }
-  .nav-links { display:none; }
-  nav.open .nav-links {
-    display:flex; flex-direction:column; position:fixed;
-    inset:0; background:var(--cream-l); padding:88px 40px 40px;
-    gap:28px; z-index:150; list-style:none;
+  .nav-links {
+    display: flex !important;
+    width: 100%;
+    justify-content: space-between;
+    padding: 8px 0 2px;
+    margin: 0;
+    list-style: none;
+    gap: 0;
+    border-top: 1px solid rgba(26,43,53,0.08);
+    margin-top: 8px;
   }
-  nav.open .nav-links a { font-size:22px; color:var(--navy); font-family:'Cormorant Garamond',serif; font-weight:400; }
-  nav.open .nav-cta { display:inline-block; margin-top:12px; align-self:flex-start; }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.2px;
+    color: rgba(26,43,53,0.65);
+    padding: 4px 2px;
+    white-space: nowrap;
+  }
+  .nav-links a.act { color: var(--green); }
   .s, .s-sm { padding: 72px 28px; }
   .ph { padding: 56px 28px 44px; }
   .hero { padding: 100px 28px 80px; }
