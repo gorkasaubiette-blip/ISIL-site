@@ -10,18 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Upload files via FTP
-        env:
-          FTP_USER: u702380420
-          FTP_PASS: ${{ secrets.FTP_PASSWORD }}
-          FTP_HOST: 72.60.93.231
-        run: |
-          find . -not -path './.git*' -not -path './.github*' -type f | while read f; do
-            remote="${f#./}"
-            echo "Uploading: $remote"
-            curl -v --ftp-create-dirs \
-              -T "$f" \
-              "ftp://$FTP_HOST/public_html/$remote" \
-              --user "$FTP_USER:$FTP_PASS" || exit 1
-          done
-          echo "Deploy terminé"
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: 72.60.93.231
+          username: u702380420
+          password: ${{ secrets.FTP_PASSWORD }}
+          server-dir: /public_html/
