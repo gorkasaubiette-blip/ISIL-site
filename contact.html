@@ -43,17 +43,27 @@
   <div class="g6040">
     <div>
       <div style="margin-bottom:32px"><span class="eye">Formulaire</span><h2 style="font-size:clamp(24px,3vw,34px)">Prendre contact</h2></div>
-      <form>
+      <form action="https://formspree.io/f/myklaqae" method="POST" id="contact-form">
+        <input type="hidden" name="_subject" value="Nouvelle demande de diagnostic — ISIL">
         <div class="g2s" style="gap:18px">
-          <div class="fg-g"><label class="fl-l">Prénom</label><input class="fi" type="text" placeholder="Jean"></div>
-          <div class="fg-g"><label class="fl-l">Nom</label><input class="fi" type="text" placeholder="Dupont"></div>
+          <div class="fg-g"><label class="fl-l">Prénom</label><input class="fi" type="text" name="prenom" placeholder="Jean" required></div>
+          <div class="fg-g"><label class="fl-l">Nom</label><input class="fi" type="text" name="nom" placeholder="Dupont" required></div>
         </div>
-        <div class="fg-g"><label class="fl-l">Adresse e-mail</label><input class="fi" type="email" placeholder="jean@exemple.fr"></div>
-        <div class="fg-g"><label class="fl-l">Téléphone</label><input class="fi" type="tel" placeholder="+33 6 xx xx xx xx"></div>
-        <div class="fg-g"><label class="fl-l">Surface du jardin</label><select class="fs"><option value="">Sélectionnez une surface</option><option>400 – 600 m²</option><option>600 m² – 1 000 m²</option><option>1 000 m² – 2 000 m²</option><option>Plus de 2 000 m²</option></select></div>
-        <div class="fg-g"><label class="fl-l">Commune</label><input class="fi" type="text" placeholder="ex : Biarritz, Anglet, Hossegor…"></div>
+        <div class="fg-g"><label class="fl-l">Adresse e-mail</label><input class="fi" type="email" name="email" placeholder="jean@exemple.fr" required></div>
+        <div class="fg-g"><label class="fl-l">Téléphone</label><input class="fi" type="tel" name="telephone" placeholder="+33 6 xx xx xx xx"></div>
+        <div class="fg-g"><label class="fl-l">Surface du jardin</label><select class="fs" name="surface"><option value="">Sélectionnez une surface</option><option>400 – 600 m²</option><option>600 m² – 1 000 m²</option><option>1 000 m² – 2 000 m²</option><option>Plus de 2 000 m²</option></select></div>
+        <div class="fg-g"><label class="fl-l">Commune</label><input class="fi" type="text" name="commune" placeholder="ex : Biarritz, Anglet, Hossegor…"></div>
         <button type="submit" class="f-sub">Demander mon diagnostic gratuit</button>
       </form>
+      <div id="merci-msg" style="display:none;margin-top:24px;padding:18px 20px;background:#f0f7f4;border-radius:10px;color:#1A2B35;font-size:15px">
+        ✓ Merci ! Votre demande a bien été envoyée. Vous recevrez une réponse sous 48h.
+      </div>
+      <script>
+        if(window.location.search.includes('merci=1')){
+          document.getElementById('contact-form').style.display='none';
+          document.getElementById('merci-msg').style.display='block';
+        }
+      </script>
     </div>
     <div>
       <div style="margin-bottom:26px"><span class="eye">Garanties</span><h2 style="font-size:26px">Ce que vous obtenez</h2></div>
