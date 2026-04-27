@@ -12,7 +12,7 @@ jobs:
 
       - name: Upload files via FTP
         env:
-          FTP_USER: ${{ secrets.FTP_USERNAME }}
+          FTP_USER: u702380420
           FTP_PASS: ${{ secrets.FTP_PASSWORD }}
           FTP_HOST: 72.60.93.231
         run: |
