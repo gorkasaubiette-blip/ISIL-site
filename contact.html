@@ -43,9 +43,7 @@
   <div class="g6040">
     <div>
       <div style="margin-bottom:32px"><span class="eye">Formulaire</span><h2 style="font-size:clamp(24px,3vw,34px)">Prendre contact</h2></div>
-      <form action="https://formspree.io/f/myklaqae" method="POST" id="contact-form">
-        <input type="hidden" name="_subject" value="Nouvelle demande de diagnostic — ISIL">
-        <input type="hidden" name="_next" value="https://isil-moustiques.fr/merci.html">
+      <form id="contact-form">
         <div class="g2s" style="gap:18px">
           <div class="fg-g"><label class="fl-l">Prénom</label><input class="fi" type="text" name="prenom" placeholder="Jean" required></div>
           <div class="fg-g"><label class="fl-l">Nom</label><input class="fi" type="text" name="nom" placeholder="Dupont" required></div>
@@ -56,14 +54,20 @@
         <div class="fg-g"><label class="fl-l">Commune</label><input class="fi" type="text" name="commune" placeholder="ex : Biarritz, Anglet, Hossegor…"></div>
         <button type="submit" class="f-sub">Demander mon diagnostic gratuit</button>
       </form>
-      <div id="merci-msg" style="display:none;margin-top:24px;padding:18px 20px;background:#f0f7f4;border-radius:10px;color:#1A2B35;font-size:15px">
-        ✓ Merci ! Votre demande a bien été envoyée. Vous recevrez une réponse sous 48h.
-      </div>
       <script>
-        if(window.location.search.includes('merci=1')){
-          document.getElementById('contact-form').style.display='none';
-          document.getElementById('merci-msg').style.display='block';
-        }
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+          e.preventDefault();
+          const data = new FormData(e.target);
+          data.append('_subject', 'Nouvelle demande de diagnostic — ISIL');
+          try {
+            const res = await fetch('https://formspree.io/f/myklaqae', {
+              method: 'POST',
+              body: data,
+              headers: { 'Accept': 'application/json' }
+            });
+            if (res.ok) window.location.href = 'merci.html';
+          } catch(err) {}
+        });
       </script>
     </div>
     <div>
